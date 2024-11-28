@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+
+  app:
+    build:
+      context: ../app  # Asegúrate de que esta ruta sea correcta
+    container_name: node-app
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/usersdb
+    networks:
+      - my-network
+    ports:
+      - "3000:3000"
+
+networks:
+  my-network:
+    driver: bridge
