@@ -1,9 +1,9 @@
 const cassandra = require('cassandra-driver');
 
 const client = new cassandra.Client({
-  contactPoints: ['localhost'], // Cambia a 'cassandra' si se ejecuta en un entorno de red Docker
+  contactPoints: [process.env.CASSANDRA_CONTACT_POINT || '127.0.0.1'],
   localDataCenter: 'datacenter1',
-  keyspace: 'test_keyspace' // Asegúrate de que este keyspace exista
+  keyspace: 'test_keyspace'
 });
 
 async function connect() {
@@ -15,5 +15,4 @@ async function connect() {
   }
 }
 
-// Exporta la función para usarla en otros archivos
-module.exports = { connect, client };
+module.exports = { client, connect };

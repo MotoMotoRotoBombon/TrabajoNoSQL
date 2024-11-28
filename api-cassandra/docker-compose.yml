@@ -8,4 +8,23 @@ services:
     environment:
       CASSANDRA_CLUSTER_NAME: "Test Cluster"
       CASSANDRA_SEEDS: "cassandra"
+    networks:
+      - my-network
 
+  app:
+    build:
+      context: . # Asegúrate de que tu Dockerfile esté en la raíz del proyecto
+    container_name: node-app
+    depends_on:
+      - cassandra
+    environment:
+      - NODE_ENV=development
+      - CASSANDRA_CONTACT_POINT=cassandra # Utiliza el nombre del servicio de Cassandra
+    networks:
+      - my-network
+    ports:
+      - "3000:3000" # Mapea el puerto de tu aplicación
+
+networks:
+  my-network:
+    driver: bridge
